@@ -205,3 +205,42 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# ---------------------------------------------------------------------------
+# Scientific data for this project (workspace CLAUDE.md section 10).
+# Raw data is fetched and checksummed at run time, never committed: see
+# tools/fetch_imc_centroids.py and src/disease_dynamics/public_data.py.
+# The cache lives outside OneDrive, at $SPATIOTEMPORAL_CACHE or
+# ~/.cache/spatiotemporal, so it is not under this tree at all.
+# ---------------------------------------------------------------------------
+data/
+results/
+cache/
+
+# Single-cell and imaging tables. covid-imc.h5ad alone is 342 MB.
+*.h5ad
+*.loom
+*.zarr/
+
+# Multiplexed imaging masks and stacks
+*.tiff
+*.tif
+*.mcd
+*.ome.tif
+
+# Molecular dynamics trajectories
+*.dcd
+*.xtc
+*.trr
+*.nc
+
+# Meshes and field output
+*.vtu
+*.vtk
+*.msh
+
+# Large array dumps
+*.npz
+*.npy
+*.h5
+*.hdf5

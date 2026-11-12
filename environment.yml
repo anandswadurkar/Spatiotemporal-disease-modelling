@@ -1,0 +1,49 @@
+# Create with:
+#     conda env create -f environment.yml
+#     conda activate spatiotemporal
+#
+# Install everything from conda-forge. A pip build of a compiled package on top of
+# a conda environment is a reliable way to get crashes with no traceback.
+#
+# The environment lives in the conda install directory, outside OneDrive, so that
+# syncing never locks its thousands of small files.
+
+name: spatiotemporal
+
+channels:
+  - conda-forge
+  # nodefaults keeps Anaconda's `defaults` channel out even when ~/.condarc lists it.
+  # Mixing the two makes the classic solver search a far larger space: on this machine a
+  # mixed solve burned 32 minutes of CPU without finishing. It also avoids silently mixing
+  # builds of the same compiled package from two channels.
+  - nodefaults
+
+dependencies:
+  # 3.11 matches the other projects in this workspace, so one interpreter's
+  # quirks are known.
+  - python=3.11
+  # Below 2.4 keeps scipy's compiled extensions on a NumPy ABI they were built
+  # and tested against.
+  - numpy<2.4
+  - scipy
+  - matplotlib
+  # Public-database queries (GTEx, gnomAD, GWAS Catalog, ClinVar).
+  - requests
+  # Reads the .h5ad single-cell tables published by the multiplexed-imaging papers
+  # (Track A). h5py alone is enough to read them: an .h5ad is plain HDF5, and the
+  # category mappings live in `obs/__categories`, so anndata is not required just to
+  # load a cell table.
+  - h5py
+  # Cohort metadata arrives as CSV with heterogeneous column types. Note that the
+  # Rendeiro clinical annotation has column names colliding under case folding
+  # (`lesions:Abscess` / `lesions:abscess`), so it must be read case-sensitively;
+  # pandas does that and PowerShell's Import-Csv does not.
+  - pandas
+  # Notebook. ipykernel 7 changed the kernel protocol; VS Code's Jupyter extension
+  # is tested against 6.x, and with 7.x the kernel can die on connect.
+  - ipykernel=6.29.*
+  # nbformat writes the generated notebook; nbclient executes it headless.
+  # nbclient rather than nbconvert, which pulls in pandoc.
+  - nbformat
+  - nbclient
+  - ruff
